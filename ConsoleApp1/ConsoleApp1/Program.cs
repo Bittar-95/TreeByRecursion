@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 
 namespace ConsoleApp1
@@ -8,13 +8,11 @@ namespace ConsoleApp1
         public int Id { get; set; }
         public int? ParentId { get; set; }
     }
-
     public class Node
     {
         public int Id { get; set; }
         public List<Node> Children { get; set; }
     }
-
 
     public class Program
     {
@@ -31,10 +29,20 @@ namespace ConsoleApp1
                     new  ListItem {Id = 8 , ParentId = 4},
                     new  ListItem {Id = 9 , ParentId = 1},
             };
-            var tree = GetTree(data);
+            var tree = GetNode(data);
+        }
+
+        public static Node GetNode(List<ListItem> All)
+        {
+            var no = new Node();
+            var itm = All.FirstOrDefault(x => x.ParentId == null);
+            no.Id = itm.Id;
+            no.Children = GetTree(All, itm.Id);
+            return no;
         }
         public static List<Node> GetTree(List<ListItem> All, int? ParentId = null)
         {
+
             var items = All.Where(p => p.ParentId == ParentId).ToList();
             if (items.Count == 0)
             {
